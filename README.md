@@ -101,7 +101,7 @@
 * 导出的 `markdown` 文件中，每个 `cpp` 文件使用一级标题分隔，标题由路径名生成。
 * 在 `Typora` 中，您可以设置使用一级标题自动分页导出 `PDF` 这样你的每个 `cpp` 文件都是整页的。但这部分工作脚本不会为你完成。
 
-使用 `pdfOutlineOddPage.exe` 将导出 `PDF` 的所有一级标题固定在奇数页上，用于上面打印。
+使用 `pdfOutlineOddPage.exe` 将导出 `PDF` 的所有一级标题固定在奇数页上，用于双面打印。
 
 * 可以双击打开 `pdfOutlineOddPage.exe`，然后根据提示完成，导出文件位于源目录。
 * 拖拽图标到 `pdfOutlineOddPage.exe`，等待程序运行结束，导出文件位于源目录。

@@ -7,7 +7,7 @@ import git
 import iioo
 
 
-VERSION = "1.3.4"
+VERSION = "1.3.5"
 MODE_NORMAL = 0
 MODE_COMMAND = 1
 MODE_ARGUMENT = 2
@@ -22,6 +22,8 @@ Last:       2023/05/15
 1.3.3       Append Command Mode. Type "Cmd" to enter and use git command and others in the application.
 1.3.4       Append Quick Mode. You can drag and drop the icon of files to the application to export. \
 Note folder isn't supported. And you can use "-c" / "--cmd" with shell start to enter the Command Mode quickly.
+1.3.5       pdfOutlineOddPage tool is added which is separated from cpps2md. \
+It can make all the first level outline of pdf keeping on odd pages. You can drag and drop the pdf to the tool to start or run directly.
 """.format(VERSION)
 
 
@@ -48,7 +50,7 @@ def upload(md: bool):
             iioo.write_title(_path)
             with open(_path, "r", encoding="utf-8") as src:
                 _block = src.read()
-            iioo.write_block(_block)
+            iioo.write_block(_block, _path)
         else:
             print("Delete:          {}".format(_path))
     print()
@@ -141,7 +143,7 @@ def argument():
             iioo.write_title(_title)
             with open(_path, "r", encoding="utf-8") as src:
                 _block = src.read()
-            iioo.write_block(_block)
+            iioo.write_block(_block, _path)
     print()
     if iioo.empty():
         print("There is nothing to output.")

@@ -6,7 +6,7 @@ import git
 
 
 PATH_SKIP = ".bin\\skip.ini"  # 黑名单路径
-FILE_TYPE = (".cpp",)  # 支持文件类型
+FILE_TYPE = (".cpp", ".md")  # 支持文件类型
 
 skips = []  # 路径黑名单
 
@@ -35,11 +35,15 @@ def check_type(s: str) -> bool:
     return False
 
 
+def key_sort_path(fp: str, path: str):
+    return os.path.isfile(os.path.join(fp, path)), "".join(pinyin(path.upper()))
+
+
 # 路径生成器
 def walk(md: bool, fp='.'):
     # 路径生成器 - git status 支持
     def _gen_filepath_1(fp='.'):
-        for _mode, _filepath in sorted(git.status(fp), key=lambda __: "".join(pinyin(__[1].upper()))):
+        for _mode, _filepath in sorted(git.status(fp), key=lambda __: key_sort_path(fp, __[1])):
             _full_path = os.path.join(fp, _filepath)
             if not check_skip(_filepath):
                 if not os.path.exists(_full_path) or os.path.isfile(_full_path):
@@ -50,7 +54,7 @@ def walk(md: bool, fp='.'):
 
     # 路径生成器 - 全路径筛选
     def _gen_filepath_2(fp='.', mode=git.STATUS_UNKNOWN):
-        for _filepath in sorted(os.listdir(fp), key=lambda __: "".join(pinyin(__.upper()))):
+        for _filepath in sorted(os.listdir(fp), key=lambda __: key_sort_path(fp, __)):
             _full_path = os.path.join(fp, _filepath)
             if not check_skip(_filepath):
                 if os.path.isfile(_full_path):

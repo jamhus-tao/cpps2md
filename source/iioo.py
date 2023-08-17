@@ -9,6 +9,13 @@ PATH_HEAD = ".bin\\head.txt"  # 公共头部文本路径
 PATH_OUT = ".out"  # 输出文件夹
 PATH_FILE = "{}.md".format(time.strftime("%Y%m%d%H%M%S"))  # Markdown 导出路径
 PATH_LOG = "{}.log".format(time.strftime("%Y%m%d%H%M%S"))  # 更新日志导出路径
+YAML_FRONT_MATTER = """---
+title: ACM Code Template
+author: Jamhus Tao
+header: Jamhus Tao / GreatLiangpi ${today}
+footer: ACM Code Template
+---
+"""
 
 
 head = ""  # 公共头部文本
@@ -34,8 +41,8 @@ def write_title(title: str):
     data.append("\n")
 
 
-# 文本载入正文缓存
-def write_block(block: str):
+# cpp 格式文本载入正文缓存
+def write_cpp_block(block: str):
     if len(head):
         block = block.split('\n')
         _i = 0
@@ -50,6 +57,19 @@ def write_block(block: str):
     data.append(block)
     data.append("```\n")
     data.append("\n")
+
+
+# markdown 格式文本载入正文缓存
+def write_md_block(block: str):
+    data.append(block)
+    data.append("\n")
+
+
+def write_block(block: str, file: str):
+    if file.endswith(".cpp"):
+        write_cpp_block(block)
+    elif file.endswith(".md"):
+        write_md_block(block)
 
 
 # 标题载入目录缓存
@@ -103,6 +123,7 @@ def output(with_content=True):
     if not os.path.exists(PATH_OUT):
         os.mkdir(PATH_OUT)
     with open(os.path.join(PATH_OUT, PATH_FILE), "w", encoding="utf-8") as _file:
+        _file.writelines(YAML_FRONT_MATTER)
         if with_content:
             _file.writelines(["# 目录\n", "\n"])
             _file.writelines(content)

@@ -1,9 +1,0 @@
-{
-    "release": [
-        "V1.3.4": {
-            "path": "",
-            "date": "2023/05/16",
-            "description": "Append Quick Mode. You can drag and drop the icon of files to the application to export. Note that folder isn't supported to drag and drop. Besides, you can use \"-c\" / \"--cmd\" with shell start to enter the Command Mode quickly. Also, double click to start \"cpps2md-c.bat\" is same."
-        }, 
-    ]
-}

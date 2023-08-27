@@ -2,37 +2,50 @@
 # jamhus_tao @ 2023
 import os
 import time
+import json
 import git
 
 
-PATH_HEAD = ".bin\\head.txt"  # 公共头部文本路径
+PATH_CFG = ".bin\\config.json"  # 配置路径
 PATH_OUT = ".out"  # 输出文件夹
-PATH_FILE = "{}.md".format(time.strftime("%Y%m%d%H%M%S"))  # Markdown 导出路径
-PATH_LOG = "{}.log".format(time.strftime("%Y%m%d%H%M%S"))  # 更新日志导出路径
-YAML_FRONT_MATTER = """---
-title: ACM Code Template
-author: Jamhus Tao
-header: Jamhus Tao / GreatLiangpi ${today}
-footer: ACM Code Template
----
-"""
+PATH_FILE = ""  # Markdown 导出路径
+PATH_LOG = ""  # 更新日志导出路径"
+FILE_TYPE = {}  # 支持文件类型
+HEAD = ""  # 公共头部文本
+YAML_FRONT_MATTER = ""
 
 
-head = ""  # 公共头部文本
 content = []  # 目录缓冲
 data = []  # 正文缓冲
 
 
-# 加载头部文本
-def load():
-    global head
-    with open(PATH_HEAD, "r", encoding="utf-8") as file:
-        head = file.read()
-    head = head.split('\n')
+# 加载配置
+def init():
+    global PATH_FILE, PATH_LOG
+    PATH_FILE = "{}.md".format(time.strftime("%Y%m%d%H%M%S"))  # Markdown 导出路径
+    PATH_LOG = "{}.log".format(time.strftime("%Y%m%d%H%M%S"))  # 更新日志导出路径"
+
+    with open(PATH_CFG, "r", encoding="utf-8") as _file:
+        _data = json.load(_file)
+
+    global FILE_TYPE
+    FILE_TYPE = _data["file_type"]
+
+    global HEAD
+    HEAD = _data["ignore_head"].split('\n')
     _i = 0
-    while _i < len(head) and (head[_i].lstrip() == '' or head[_i].lstrip().startswith('//')):
+    while _i < len(HEAD) and (HEAD[_i].lstrip() == '' or HEAD[_i].lstrip().startswith('//')):
         _i += 1
-    head = '\n'.join(head[_i:])
+    HEAD = '\n'.join(HEAD[_i:])
+
+    global YAML_FRONT_MATTER
+    if len(_data["front_matter"]) == 0:
+        YAML_FRONT_MATTER = ""
+    else:
+        YAML_FRONT_MATTER = "---\n{}---\n\n\n\n".format("".join(["{}: {}\n".format(*__) for __ in _data["front_matter"].items()]))
+
+
+init()
 
 
 # 标题载入正文缓冲
@@ -41,35 +54,37 @@ def write_title(title: str):
     data.append("\n")
 
 
-# cpp 格式文本载入正文缓存
-def write_cpp_block(block: str):
-    if len(head):
+# 代码格式文本载入正文缓存
+def write_code_block(block: str, lang: str):
+    if len(HEAD):
         block = block.split('\n')
         _i = 0
         while _i < len(block) and (block[_i].lstrip() == '' or block[_i].lstrip().startswith('//')):
             _i += 1
         block = '\n'.join(block[_i:])
-        if block.startswith(head):
-            block = block[len(head):]
+        if block.startswith(HEAD):
+            block = block[len(HEAD):]
     block = block.replace("`", "'")
     block = block.strip() + "\n"
-    data.append("``` cpp\n")
+    data.append("``` {}\n".format(lang))
     data.append(block)
     data.append("```\n")
     data.append("\n")
 
 
-# markdown 格式文本载入正文缓存
-def write_md_block(block: str):
+# md 格式文本载入正文缓存
+def write_org_block(block: str):
     data.append(block)
     data.append("\n")
 
 
+# 文本载入正文缓存
 def write_block(block: str, file: str):
-    if file.endswith(".cpp"):
-        write_cpp_block(block)
-    elif file.endswith(".md"):
-        write_md_block(block)
+    _type = FILE_TYPE.get(os.path.splitext(file)[1], None)
+    if _type is None:
+        write_org_block(block)
+    else:
+        write_code_block(block, _type)
 
 
 # 标题载入目录缓存

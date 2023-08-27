@@ -2,12 +2,15 @@
 # jamhus_tao @ 2023
 import os
 import sys
+
+os.chdir("..")
+
 import gen
 import git
 import iioo
 
 
-VERSION = "1.3.5"
+VERSION = "3.0.0"
 MODE_NORMAL = 0
 MODE_COMMAND = 1
 MODE_ARGUMENT = 2
@@ -15,15 +18,7 @@ MODE_ARGUMENT = 2
 ABOUT_MESSAGE = """
 #:          cpps2md - V{}
 Developer:  Jamhus Tao
-Last:       2023/05/15
-1.1.0       Origin.
-1.2.0       Support to generate a folder of C++ source files into one Markdown file for the first time.
-1.3.0       Support for incremental template export based on git for the first time.
-1.3.3       Append Command Mode. Type "Cmd" to enter and use git command and others in the application.
-1.3.4       Append Quick Mode. You can drag and drop the icon of files to the application to export. \
-Note folder isn't supported. And you can use "-c" / "--cmd" with shell start to enter the Command Mode quickly.
-1.3.5       pdfOutlineOddPage tool is added which is separated from cpps2md. \
-It can make all the first level outline of pdf keeping on odd pages. You can drag and drop the pdf to the tool to start or run directly.
+Last:       2023/08/27
 """.format(VERSION)
 
 
@@ -159,11 +154,6 @@ def argument():
 if __name__ == '__main__':
     print("cpps2md powered by Jamhus Tao, V{}".format(VERSION))
     print()
-
-    os.chdir("..")
-
-    gen.load()
-    iioo.load()
 
     if "-c" in sys.argv or "--cmd" in sys.argv:
         mode = MODE_COMMAND

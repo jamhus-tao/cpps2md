@@ -1,3 +1,5 @@
+# cpps2md - pdfOutlineOddPage
+# jamhus_tao @ 2023
 import os
 import sys
 import pypdf

@@ -1,0 +1,21 @@
+{
+  "front_matter": {
+    "title": "ACM Code Template",
+    "author": "Jamhus Tao",
+    "header": "Jamhus Tao / GreatLiangpi ${today}",
+    "footer": "ACM Code Template"
+  },
+  "ignore_head": "// Jamhus Tao / GreatLiangpi\n// Start at 2022/10/6\n// Please using int32_t and int64_t to replace the int and long long.\n#include <bits/stdc++.h>\n#define int int64_t\n#define endl '\\n'\n#pragma GCC optimize(3, \"Ofast\", \"inline\")\nusing namespace std;\n",
+  "skip": {
+    "regex": true,
+    "list": [
+      "^README.md$",
+      "^test",
+      "^!"
+    ]
+  },
+  "file_type": {
+    ".cpp": "cpp",
+    ".md": null
+  }
+}

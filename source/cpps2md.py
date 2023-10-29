@@ -5,12 +5,12 @@ import sys
 
 os.chdir("..")
 
-import gen
-import git
-import iioo
+from Modulo import git
+from Modulo import iioo
+from Modulo import gen
 
 
-VERSION = "3.0.0"
+VERSION = "3.0.2"
 MODE_NORMAL = 0
 MODE_COMMAND = 1
 MODE_ARGUMENT = 2
